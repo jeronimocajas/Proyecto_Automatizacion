@@ -1,4 +1,4 @@
-const API_BASE="http://localhost:8000/api";
+const API_BASE = "https://auxilioscecar.up.railway.app/api";
 let adminUsuario="",adminPassword="",todosEstudiantes=[];
 
 async function login(){
