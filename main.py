@@ -6,12 +6,19 @@ from contextlib import asynccontextmanager
 import uvicorn
 from core.config import settings
 from core.database import engine, Base
+
+# 👇 Importa todos los modelos ANTES del lifespan
+from models.models import (
+    TipoAuxilio, DocumentoRequerido, Estudiante, TokenSesion,
+    Solicitud, ArchivoSolicitud, ValidacionIA, LogCorreo, Convocatoria
+)
+
 from routers import auth, solicitudes, archivos, admin, convocatorias
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+        await conn.run_sync(Base.metadata.create_all)  # ahora crea TODAS las tablas
     yield
     await engine.dispose()
 
@@ -36,7 +43,7 @@ app.include_router(archivos.router,      prefix="/api/archivos",      tags=["Arc
 app.include_router(admin.router,         prefix="/api/admin",         tags=["Administración"])
 app.include_router(convocatorias.router, prefix="/api/convocatorias", tags=["Convocatorias"])
 
-# Archivos estáticos (css y js)
+# Archivos estáticos
 app.mount("/css", StaticFiles(directory="css"), name="css")
 app.mount("/js", StaticFiles(directory="js"), name="js")
 
