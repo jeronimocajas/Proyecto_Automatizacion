@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     SMTP_TLS: bool = True
     CORREO_DESTINO_BIENESTAR: str = "bienestar@cecar.edu.co"
     ANTHROPIC_API_KEY: str = ""
+    RESEND_API_KEY: str = ""
     UPLOAD_DIR: str = "./uploads"
     MAX_FILE_SIZE_MB: int = 10
     ALLOWED_ORIGINS: List[str] = ["http://localhost:3000", "http://127.0.0.1:5500"]
