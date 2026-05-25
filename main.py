@@ -39,8 +39,10 @@ app.include_router(archivos.router,    prefix="/api/archivos",    tags=["Archivo
 app.include_router(admin.router,       prefix="/api/admin",       tags=["Administración"])
 app.include_router(convocatorias.router, prefix="/api/convocatorias", tags=["Convocatorias"])
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
-
+from pathlib import Path
+static_dir = Path("static")
+if static_dir.exists():
+    app.mount("/static", StaticFiles(directory="static"), name="static")
 @app.get("/health")
 async def health():
     return {"status": "ok", "version": "1.0.0"}
