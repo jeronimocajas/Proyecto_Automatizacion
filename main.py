@@ -10,7 +10,7 @@ from core.database import engine, Base
 # 👇 Importa todos los modelos ANTES del lifespan
 from models.models import (
     TipoAuxilio, DocumentoRequerido, Estudiante, TokenSesion,
-    Solicitud, ArchivoSolicitud, ValidacionIA, LogCorreo, Convocatoria
+    Solicitud, ArchivoSolicitud, ValidacionIA, LogCorreo, Convocatoria, CodigoVerificacion
 )
 
 from routers import auth, solicitudes, archivos, admin, convocatorias
