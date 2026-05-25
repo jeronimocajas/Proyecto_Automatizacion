@@ -45,7 +45,7 @@ app.mount("/js", StaticFiles(directory="js"), name="js")
 async def index():
     return FileResponse("index.html")
 
-@app.get("/admin.html")
+@app.get("/admin-panel")
 async def admin_page():
     return FileResponse("admin.html")
 
