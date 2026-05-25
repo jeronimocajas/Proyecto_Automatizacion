@@ -8,6 +8,7 @@ from datetime import date, datetime
 from typing import Optional
 from core.database import get_db
 from core.config import settings
+from sqlalchemy import text
 
 router = APIRouter()
 
@@ -24,9 +25,7 @@ class ConvocatoriaCreate(BaseModel):
 class ConvocatoriaUpdate(BaseModel):
     activa: bool
 
-# ── Tabla dinámica (sin modelo SQLAlchemy para simplicidad) ──
-from sqlalchemy import text
-
+# ── Auth ──────────────────────────────────────────────────────
 def verificar_admin(usuario: str, password: str):
     if usuario != settings.ADMIN_USUARIO or password != settings.ADMIN_PASSWORD:
         raise HTTPException(
@@ -37,11 +36,6 @@ def verificar_admin(usuario: str, password: str):
 # ── Endpoints públicos ────────────────────────────────────────
 @router.get("/estado", summary="Estado actual de la convocatoria")
 async def estado_convocatoria(db: AsyncSession = Depends(get_db)):
-    """
-    Endpoint publico que retorna si hay convocatoria activa
-    y la proxima convocatoria programada.
-    """
-    # Convocatoria activa
     result = await db.execute(text("""
         SELECT id, nombre, fecha_inicio, fecha_fin, activa
         FROM convocatorias
@@ -51,7 +45,6 @@ async def estado_convocatoria(db: AsyncSession = Depends(get_db)):
     """))
     activa = result.mappings().fetchone()
 
-    # Proxima convocatoria (futura, no activa)
     result2 = await db.execute(text("""
         SELECT id, nombre, fecha_inicio, fecha_fin
         FROM convocatorias
@@ -103,8 +96,6 @@ async def crear_convocatoria(
     await db.commit()
     return {"mensaje": "Convocatoria creada exitosamente."}
 
-
-
 @router.put("/admin/activar/{id}", summary="Activar una convocatoria")
 async def activar_convocatoria(
     id: int,
@@ -114,7 +105,7 @@ async def activar_convocatoria(
     verificar_admin(usuario, password)
     await db.execute(text("UPDATE convocatorias SET activa = FALSE"))
     await db.execute(text("""
-        UPDATE convocatorias SET activa = TRUE, actualizado_en = NOW()
+        UPDATE convocatorias SET activa = TRUE
         WHERE id = :id
     """), {"id": id})
     await db.commit()
@@ -128,7 +119,7 @@ async def desactivar_convocatoria(
 ):
     verificar_admin(usuario, password)
     await db.execute(text("""
-        UPDATE convocatorias SET activa = FALSE, actualizado_en = NOW()
+        UPDATE convocatorias SET activa = FALSE
         WHERE id = :id
     """), {"id": id})
     await db.commit()
@@ -165,7 +156,6 @@ async def listar_estudiantes(
     rows = result.mappings().fetchall()
     return [dict(r) for r in rows]
 
-
 @router.put("/admin/reiniciar-intentos/{solicitud_id}", summary="Reiniciar intentos de una solicitud")
 async def reiniciar_intentos(
     solicitud_id: str,
@@ -173,12 +163,11 @@ async def reiniciar_intentos(
     db: AsyncSession = Depends(get_db)
 ):
     verificar_admin(usuario, password)
-    result = await db.execute(text("""
+    await db.execute(text("""
         UPDATE solicitudes 
         SET intentos = 0, estado = 'PENDIENTE', 
             campos_faltantes = NULL, observaciones_ia = NULL,
-            resultado_validacion = NULL,
-            actualizado_en = NOW()
+            resultado_validacion = NULL
         WHERE id = :id
     """), {"id": solicitud_id})
     await db.commit()
