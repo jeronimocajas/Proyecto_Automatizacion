@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:8000/api";
+const API_BASE = "https://auxilioscecar.up.railway.app/api";
 let estado = { token:null, estudianteId:null, correo:null, cedula:null, tipoAuxilioSeleccionado:null, tiposAuxilio:[], archivoPDF:null, cartaPDF:null, intentosUsados:0 };
 let timerInterval = null, timerSegundos = 600;
 
