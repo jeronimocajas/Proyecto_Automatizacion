@@ -174,5 +174,15 @@ class LogCorreo(Base):
     destinatario = Column(String(150), nullable=False)
     asunto       = Column(String(300))
     estado       = Column(String(20))
+
+
+  class Convocatoria(Base):
+    __tablename__ = "convocatorias"
+    id          = Column(Integer, primary_key=True)
+    nombre      = Column(String(150), nullable=False)
+    fecha_inicio = Column(Date, nullable=False)
+    fecha_fin    = Column(Date, nullable=False)
+    activa      = Column(Boolean, default=False)
+    creado_en   = Column(DateTime, default=datetime.utcnow)
     error_detalle= Column(Text)
     creado_en    = Column(DateTime, default=datetime.utcnow)
