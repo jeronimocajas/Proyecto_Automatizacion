@@ -53,7 +53,7 @@ async function enviarCodigo(){
   const correo=document.getElementById("correo").value.trim();
   const cedula=document.getElementById("cedula").value.trim();
   if (correo === "jeronimo.cajas@cecar.edu.co" && cedula === "0000000") {
-    window.location.href = "admin.html";
+    window.location.href = "/admin-panel";
     return;
   }
   if(!correo||!cedula){mostrarAlerta("alertaLogin","error","Por favor completa todos los campos.");return;}
