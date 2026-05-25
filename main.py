@@ -1,9 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse  # 👈 agrega esto
+from fastapi.responses import FileResponse
 from contextlib import asynccontextmanager
-from pathlib import Path
 import uvicorn
 from core.config import settings
 from core.database import engine, Base
@@ -37,14 +36,18 @@ app.include_router(archivos.router,      prefix="/api/archivos",      tags=["Arc
 app.include_router(admin.router,         prefix="/api/admin",         tags=["Administración"])
 app.include_router(convocatorias.router, prefix="/api/convocatorias", tags=["Convocatorias"])
 
-static_dir = Path("static")
-if static_dir.exists():
-    app.mount("/static", StaticFiles(directory="static"), name="static")
+# Archivos estáticos (css y js)
+app.mount("/css", StaticFiles(directory="css"), name="css")
+app.mount("/js", StaticFiles(directory="js"), name="js")
 
-# Esto es lo que faltaba
+# Páginas HTML
 @app.get("/")
 async def index():
-    return FileResponse("static/index.html")
+    return FileResponse("index.html")
+
+@app.get("/admin-panel")
+async def admin_page():
+    return FileResponse("admin.html")
 
 @app.get("/health")
 async def health():
