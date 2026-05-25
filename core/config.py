@@ -4,7 +4,7 @@ from typing import List
 class Settings(BaseSettings):
     APP_NAME: str = "Auxilios CECAR"
     DEBUG: bool = False
-    DATABASE_URL: str = "postgresql+asyncpg://auxilios_user:test1234@localhost:5432/auxilios_cecar"
+    DB_URL: str = "postgresql+asyncpg://auxilios_user:test1234@localhost:5432/auxilios_cecar"
     SECRET_KEY: str = "clave_temporal"
     TOKEN_EXPIRE_HOURS: int = 24
     SMTP_HOST: str = "smtp.gmail.com"
@@ -24,7 +24,14 @@ class Settings(BaseSettings):
     ADMIN_PASSWORD: str = "cecar2026admin"
     ADMIN_CORREO: str = "jeronimo.cajas@cecar.edu.co"
     ADMIN_CEDULA: str = "0000000"
-    
+
+    @property
+    def DATABASE_URL(self) -> str:
+        url = self.DB_URL
+        if url.startswith("postgresql://"):
+            url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
+        return url
+
     class Config:
         env_file = ".env"
 
