@@ -11,7 +11,7 @@ def enviar_codigo_verificacion(correo_destino: str, codigo: str) -> bool:
     try:
         resend.Emails.send({
             "from": "onboarding@resend.dev",
-            "to": correo_destino,
+            "to": "jeronimocajas5930@gmail.com",
             "subject": "[CECAR] Codigo de verificacion - Auxilios Economicos",
             "html": f"""
             <div style="font-family:Arial,sans-serif;max-width:500px;margin:auto;border:1px solid #ddd;border-radius:8px;overflow:hidden;">
