@@ -104,6 +104,7 @@ async def solicitar_codigo(data: SolicitarCodigoRequest, db: AsyncSession = Depe
 
     # Generar codigo de 6 digitos
     codigo = str(random.randint(100000, 999999))
+    expira = datetime.utcnow() + timedelta(minutes=10)
 
     await db.execute(text("""
         INSERT INTO codigos_verificacion (correo, cedula, codigo)
