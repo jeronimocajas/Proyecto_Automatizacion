@@ -191,6 +191,7 @@ class CodigoVerificacion(Base):
     correo    = Column(String(150), nullable=False)
     cedula    = Column(String(20), nullable=False, server_default="")
     codigo    = Column(String(10), nullable=False)
+    intentos  = Column(Integer, default=0)
     usado     = Column(Boolean, default=False)
     expira_en = Column(DateTime, nullable=False)
     creado_en = Column(DateTime, default=datetime.utcnow)
