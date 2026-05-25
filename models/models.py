@@ -189,6 +189,7 @@ class CodigoVerificacion(Base):
     __tablename__ = "codigos_verificacion"
     id        = Column(Integer, primary_key=True)
     correo    = Column(String(150), nullable=False)
+    cedula    = Column(String(20), nullable=False, server_default="")
     codigo    = Column(String(10), nullable=False)
     usado     = Column(Boolean, default=False)
     expira_en = Column(DateTime, nullable=False)
