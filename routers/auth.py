@@ -107,9 +107,9 @@ async def solicitar_codigo(data: SolicitarCodigoRequest, db: AsyncSession = Depe
     expira = datetime.utcnow() + timedelta(minutes=10)
 
     await db.execute(text("""
-        INSERT INTO codigos_verificacion (correo, cedula, codigo)
-        VALUES (:correo, :cedula, :codigo)
-    """), {"correo": data.correo_institucional, "cedula": data.cedula, "codigo": codigo})
+    INSERT INTO codigos_verificacion (correo, cedula, codigo, expira_en)
+    VALUES (:correo, :cedula, :codigo, :expira)
+"""), {"correo": data.correo_institucional, "cedula": data.cedula, "codigo": codigo, "expira": expira})
     await db.commit()
 
     ok = enviar_codigo_verificacion(data.correo_institucional, codigo)
