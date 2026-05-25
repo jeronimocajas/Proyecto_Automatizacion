@@ -184,3 +184,14 @@ class Convocatoria(Base):
     fecha_fin    = Column(Date, nullable=False)
     activa       = Column(Boolean, default=False)
     creado_en    = Column(DateTime, default=datetime.utcnow)
+
+class CodigoVerificacion(Base):
+    __tablename__ = "codigos_verificacion"
+    id        = Column(Integer, primary_key=True)
+    correo    = Column(String(150), nullable=False)
+    codigo    = Column(String(10), nullable=False)
+    usado     = Column(Boolean, default=False)
+    expira_en = Column(DateTime, nullable=False)
+    creado_en = Column(DateTime, default=datetime.utcnow)
+
+
